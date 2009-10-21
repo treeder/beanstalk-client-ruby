@@ -352,7 +352,9 @@ module Beanstalk
     def call_wrap(c, *args)
       self.last_conn = c
       c.send(*args)
-    rescue EOFError, Errno::ECONNRESET, Errno::EPIPE, UnexpectedResponse => ex
+    rescue UnexpectedResponse => ex
+      raise ex
+    rescue EOFError, Errno::ECONNRESET, Errno::EPIPE => ex
       self.remove(c)
       raise ex
     end
