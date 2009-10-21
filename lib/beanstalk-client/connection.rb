@@ -317,7 +317,9 @@ module Beanstalk
     end
 
     def remove(conn)
-      @connections.delete(conn.addr)
+      connection = @connections.delete(conn.addr)
+      connection.close if connection
+      connection
     end
 
     def close
