@@ -43,16 +43,19 @@ class Beanstalk::Job
     @reserved = reserved
   end
 
+  # Deletes the job from the queue
   def delete()
     return if !@reserved
     @conn.delete(id)
     @reserved = false
   end
 
+
   def put_back(pri=self.pri, delay=0, ttr=self.ttr)
     @conn.put(body, pri, delay, ttr)
   end
 
+  # Releases the job back to the queue so another consumer can get it (call this if the job failed and want it to be tried again)
   def release(newpri=nil, delay=0)
     return if !@reserved
     @conn.release(id, newpri || pri, delay)
@@ -65,6 +68,7 @@ class Beanstalk::Job
     @reserved = false
   end
 
+  # Ping beanstalkd to to tell it you're alive and processing. If beanstalkd doesn't hear from you for more than the ttr seconds (specified by the put command), then it assumes the consumer died and reinserts the job back into the queue for another to process.
   def touch
     return if !@reserved
     @conn.touch(id)
@@ -75,6 +79,8 @@ class Beanstalk::Job
   end
 
   def timeouts() stats['timeouts'] end
+
+  # Time left (in seconds) that beanstalk has to process the job. When this time expires, beanstalkd automatically reinserts the job in the queue.  See the ttr parameter for Beanstalk::Pool#put
   def time_left() stats['time-left'] end
   def age() stats['age'] end
   def state() stats['state'] end

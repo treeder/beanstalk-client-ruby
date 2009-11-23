@@ -265,14 +265,28 @@ module Beanstalk
       @last_conn.addr
     end
 
+    # Put a job on the queue.
+    #
+    # == Parameters:
+    #
+    # * <tt>body</tt>: the payload of the job (use Beanstalk::Pool#yput / Beanstalk::Job#ybody to automatically serialize your payload with YAML)
+    # * <tt>pri</tt>: priority. Default 65536 (higher numbers are higher priority)
+    # * <tt>delay</tt>: how long to wait until making the job available for reservation
+    # * <tt>ttr</tt>: time in seconds for the job to reappear on the queue (if beanstalk doesn't hear from a consumer within this time, assume the consumer died and make the job available for someone else to process).  Default 120 seconds.
     def put(body, pri=65536, delay=0, ttr=120)
       send_to_rand_conn(:put, body, pri, delay, ttr)
     end
 
+    # Like put, but serialize the object with YAML.
     def yput(obj, pri=65536, delay=0, ttr=120)
       send_to_rand_conn(:yput, obj, pri, delay, ttr)
     end
 
+    # Reserve a job from the queue.
+    #
+    # == Parameters
+    #
+    # * <tt>timeout</tt> - Time (in seconds) to wait for a job to be available. If nil, wait indefinitely.
     def reserve(timeout=nil)
       send_to_rand_conn(:reserve, timeout)
     end
@@ -325,6 +339,7 @@ module Beanstalk
       @connections.delete(conn.addr)
     end
 
+    # Close all open connections for this pool
     def close
       while @connections.size > 0
         addr = @connections.keys.last
