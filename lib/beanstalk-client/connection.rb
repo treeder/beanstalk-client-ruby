@@ -19,6 +19,7 @@ require 'socket'
 require 'fcntl'
 require 'yaml'
 require 'set'
+require 'thread'
 require 'beanstalk-client/errors'
 require 'beanstalk-client/job'
 
@@ -27,6 +28,7 @@ module Beanstalk
     attr_reader :addr
 
     def initialize(addr, default_tube=nil)
+      @mutex = Mutex.new
       @waiting = false
       @addr = addr
       connect
@@ -80,6 +82,7 @@ module Beanstalk
 
     def reserve(timeout=nil)
       raise WaitingForJobError if @waiting
+      @mutex.lock
       if timeout.nil?
         @socket.write("reserve\r\n")
       else
@@ -97,6 +100,8 @@ module Beanstalk
       end
 
       Job.new(self, *read_job('RESERVED'))
+    ensure
+      @mutex.unlock
     end
 
     def delete(id)
@@ -178,10 +183,13 @@ module Beanstalk
 
     def interact(cmd, rfmt)
       raise WaitingForJobError if @waiting
+      @mutex.lock
       @socket.write(cmd)
       return read_yaml('OK') if rfmt == :yaml
       return found_job if rfmt == :job
       check_resp(*rfmt)
+    ensure
+      @mutex.unlock
     end
 
     def get_resp()
@@ -336,7 +344,9 @@ module Beanstalk
     end
 
     def remove(conn)
-      @connections.delete(conn.addr)
+      connection = @connections.delete(conn.addr)
+      connection.close if connection
+      connection
     end
 
     # Close all open connections for this pool
@@ -370,7 +380,9 @@ module Beanstalk
     def call_wrap(c, *args)
       self.last_conn = c
       c.send(*args)
-    rescue EOFError, Errno::ECONNRESET, Errno::EPIPE, UnexpectedResponse => ex
+    rescue UnexpectedResponse => ex
+      raise ex
+    rescue EOFError, Errno::ECONNRESET, Errno::EPIPE => ex
       self.remove(c)
       raise ex
     end
