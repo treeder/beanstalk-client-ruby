@@ -24,3 +24,5 @@ module Beanstalk
 end
 
 require 'beanstalk-client/connection'
+require 'beanstalk-client/errors'
+require 'beanstalk-client/job'

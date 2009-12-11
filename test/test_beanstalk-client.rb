@@ -1,11 +1,6 @@
-require File.dirname(__FILE__) + '/test_helper.rb'
+require 'helper'
 
-require 'beanstalk-client'
-
-class TestBeanstalk < Test::Unit::TestCase
-  def setup
-  end
-
+class TestBeanstalkClient < Test::Unit::TestCase
   def test_truth
     assert true
   end

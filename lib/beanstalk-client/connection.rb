@@ -20,8 +20,6 @@ require 'fcntl'
 require 'yaml'
 require 'set'
 require 'thread'
-require 'beanstalk-client/errors'
-require 'beanstalk-client/job'
 
 module Beanstalk
   class Connection

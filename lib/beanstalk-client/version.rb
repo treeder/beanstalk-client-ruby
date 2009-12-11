@@ -1,5 +1,3 @@
 module Beanstalk #:nodoc:
-  module VERSION #:nodoc:
-    STRING = '1.0.2'
-  end
+  VERSION = '1.0.3'
 end
