@@ -255,9 +255,10 @@ module Beanstalk
             @watch_list.each{|tube| @connections[addr].watch(tube)}
             to_ignore.each{|tube| @connections[addr].ignore(tube)}
           end
+        rescue Errno::ECONNREFUSED
+          raise NotConnected
         rescue Exception => ex
           puts "#{ex.class}: #{ex}"
-          #puts begin ex.fixed_backtrace rescue ex.backtrace end
         end
       end
       @connections.size

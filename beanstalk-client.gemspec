@@ -9,19 +9,20 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Keith Rarick"]
-  s.date = %q{2009-12-11}
+  s.date = %q{2009-12-15}
   s.description = %q{Ruby client for beanstalkd}
   s.email = %q{kr@xph.us}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README"
+     "README.rdoc"
   ]
   s.files = [
     ".gitignore",
      "LICENSE",
-     "README",
+     "README.rdoc",
      "Rakefile",
      "VERSION",
+     "beanstalk-client.gemspec",
      "lib/beanstalk-client.rb",
      "lib/beanstalk-client/connection.rb",
      "lib/beanstalk-client/errors.rb",
