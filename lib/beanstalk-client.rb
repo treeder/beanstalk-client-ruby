@@ -26,3 +26,23 @@ end
 require 'beanstalk-client/connection'
 require 'beanstalk-client/errors'
 require 'beanstalk-client/job'
+
+# overrides for IronMQ
+
+module Beanstalk
+  class Connection
+
+    def auth(token)
+      interact("auth #{token}\r\n",
+               %w(OK))
+    end
+
+    def read_job(word)
+      id, bytes = check_resp(word) #.map { |s| s.to_i }
+      bytes = bytes.to_i
+      body = read_bytes(bytes)
+      raise 'bad trailer' if read_bytes(2) != "\r\n"
+      [id, body, word == 'RESERVED']
+    end
+  end
+end

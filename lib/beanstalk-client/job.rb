@@ -41,6 +41,7 @@ class Beanstalk::Job
     @id = id
     @body = body
     @reserved = reserved
+    #p self
   end
 
   # Deletes the job from the queue

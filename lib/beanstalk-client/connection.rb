@@ -50,11 +50,6 @@ module Beanstalk
       @socket = nil
     end
 
-    def auth(token)
-      interact("auth #{token}\r\n",
-               %w(OK))
-    end
-
     def put(body, pri=65536, delay=0, ttr=120)
       pri = pri.to_i
       delay = delay.to_i
