@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ironmq}
-  s.version = "1.1.1"
+  s.version = "1.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Keith Rarick}]
@@ -20,13 +20,14 @@ Gem::Specification.new do |s|
     "LICENSE",
     "README.md",
     "Rakefile",
-    "VERSION",
+    "VERSION.yml",
     "ironmq.gemspec",
     "lib/beanstalk-client.rb",
     "lib/beanstalk-client/connection.rb",
     "lib/beanstalk-client/errors.rb",
     "lib/beanstalk-client/job.rb",
     "lib/beanstalk-client/version.rb",
+    "lib/ironmq.rb",
     "test/helper.rb",
     "test/test_beanstalk-client.rb",
     "website/index.txt",
