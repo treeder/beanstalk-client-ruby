@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
-    "beanstalk-client.gemspec",
+    "ironmq.gemspec",
     "lib/beanstalk-client.rb",
     "lib/beanstalk-client/connection.rb",
     "lib/beanstalk-client/errors.rb",
