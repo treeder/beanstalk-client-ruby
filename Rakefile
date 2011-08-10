@@ -4,7 +4,7 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name        = "beanstalk-client"
+    gem.name        = "ironmq"
     gem.summary     = "Ruby client for beanstalkd"
     gem.description = "Ruby client for beanstalkd"
     gem.email       = "kr@xph.us"
